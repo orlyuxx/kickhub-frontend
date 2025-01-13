@@ -5,6 +5,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-space-grotesk: "Space Grotesk", sans-serif;
+  --font-inter: "Inter", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,5 +19,56 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter); /* Set Inter as default font for body text */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-space-grotesk); /* Use Space Grotesk for headings */
+}
+
+/* Example of how to apply the different font weights (already done in previous steps) */
+.font-light-space-grotesk {
+  font-family: var(--font-space-grotesk);
+  font-weight: 300;
+}
+
+.font-regular-space-grotesk {
+  font-family: var(--font-space-grotesk);
+  font-weight: 400;
+}
+
+.font-medium-space-grotesk {
+  font-family: var(--font-space-grotesk);
+  font-weight: 500;
+}
+
+.font-bold-space-grotesk {
+  font-family: var(--font-space-grotesk);
+  font-weight: 700;
+}
+
+/* Inter font styles for smaller text or buttons */
+.font-light-inter {
+  font-family: var(--font-inter);
+  font-weight: 300;
+}
+
+.font-regular-inter {
+  font-family: var(--font-inter);
+  font-weight: 400;
+}
+
+.font-medium-inter {
+  font-family: var(--font-inter);
+  font-weight: 500;
+}
+
+.font-bold-inter {
+  font-family: var(--font-inter);
+  font-weight: 700;
 }
