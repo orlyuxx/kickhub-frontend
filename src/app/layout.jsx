@@ -1,5 +1,9 @@
+import React from "react";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
+
+import Navbar from "./components/navbar";
+import Footer from "./components/footer";
 
 // Import Space Grotesk for the title/large text and Inter for the body text
 const spaceGrotesk = Space_Grotesk({
@@ -23,12 +27,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/images/white-logo.png" />
+        <link rel="icon" href="/images/black-logo.png" />
       </head>
       <body
         className={`${spaceGrotesk.variable} ${inter.variable} antialiased`}
       >
+        <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );

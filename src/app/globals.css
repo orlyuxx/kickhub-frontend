@@ -17,6 +17,7 @@
 }
 
 body {
+  overflow-x: hidden;
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-inter); /* Set Inter as default font for body text */
@@ -71,4 +72,12 @@ h6 {
 .font-bold-inter {
   font-family: var(--font-inter);
   font-weight: 700;
+}
+
+/* Custom Styles */
+
+.shadow-custom {
+  filter: drop-shadow(
+    0 4px 25px rgba(0, 0, 0, 0.5)
+  ); /* Adjust values for a downward shadow */
 }
