@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <>
       {/* Footer */}
-      <footer className="footer bg-white text-primary pt-20 pl-16 pb-6">
+      <footer className="footer bg-gray-200 text-primary pt-20 pl-16 pb-6">
         <nav>
           <h6 className="footer-title font-bold-inter text-primary">Stores</h6>
           <a className="link link-hover text-md">KickHub Butuan</a>
@@ -25,7 +25,7 @@ export default function Footer() {
           <a className="link link-hover text-md">Cookie policy</a>
         </nav>
       </footer>
-      <footer className="footer bg-white text-base-content border-base-300 border-t px-10 py-4">
+      <footer className="footer bg-gray-200 text-base-content border-base-300 border-t px-10 py-4">
         <aside className="grid-flow-col items-center">
           <Image
             src="/images/black-logo-transparent.png"

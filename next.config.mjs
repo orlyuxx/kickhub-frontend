@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    domains: ["kickhub-backend.test"],
+  },
+};
 
 export default nextConfig;

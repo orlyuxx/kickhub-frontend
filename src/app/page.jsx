@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
-import ShoeCard from "@/app/ui/shoecard";
+import ShoeCard from "@/app/components/ui/shoecard";
 
 export default function Home() {
   return (
@@ -29,9 +30,16 @@ export default function Home() {
             combining exceptional quality, unmatched comfort, and timeless
             design to elevate every step you take.
           </p>
-          <button className="btn btn-primary font-regular-inter mt-4 w-full sm:w-auto">
-            Shop Now
-          </button>
+          <Link href="/store/butuan" passHref>
+            <motion.button
+              className="btn btn-primary font-regular-inter mt-4 w-full sm:w-auto"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              Shop Now
+            </motion.button>
+          </Link>
         </motion.div>
 
         {/* Image Section */}
@@ -230,9 +238,11 @@ export default function Home() {
           </div>
 
           <div className="gap mr-34">
-            <button className="btn bg-white text-primary border border-primary rounded-full px-6 py-2 shadow-md hover:bg-gray-100 transition">
-              Show More
-            </button>
+            <Link href="/store/butuan" passHref>
+              <button className="btn bg-white text-primary border border-primary rounded-full px-6 py-2 shadow-md hover:bg-gray-100 transition">
+                Show More
+              </button>
+            </Link>
           </div>
         </div>
       </div>

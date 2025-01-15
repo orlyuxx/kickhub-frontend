@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   MagnifyingGlassIcon,
@@ -9,24 +9,34 @@ import {
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
 import Searchbar from "./searchbar";
+import Link from "next/link";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem("token"));
+  }, []);
 
   return (
     <nav className="flex justify-between items-center p-3 bg-white/30 backdrop-blur-md shadow-md px-20 fixed w-full left-0 right-0 z-50 border-b border-gray-200">
       {/* Logo Section */}
-      <div className="flex items-center -space-x-2">
-        <Image
-          src="/images/black-logo-transparent.png"
-          alt="KickHub Logo"
-          width={52} // Adjust the width as needed
-          height={52} // Adjust the height as needed
-        />
-        <span className="text-2xl font-bold-space-grotesk text-neutral">
-          KickHub
-        </span>
-      </div>
+      <Link href="/" passHref>
+        <div className="flex items-center -space-x-2 ml-[-46px]">
+          <Image
+            src="/images/black-logo-transparent.png"
+            alt="KickHub Logo"
+            priority={true}
+            width={52}
+            height={52}
+            className="h-12 w-12"
+          />
+          <span className="text-lg font-bold-space-grotesk text-primary">
+            KickHub
+          </span>
+        </div>
+      </Link>
 
       {/* Navigation Links */}
       <ul className="flex space-x-6 font-bold-inter text-sm">
@@ -43,36 +53,39 @@ const Navbar = () => {
               <div className="grid grid-cols-2 gap-x-4">
                 <div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Sports
-                  </div>
-                  <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
                     Basketball
                   </div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Lifestyle
+                    Running Shoes
                   </div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Training & Gym
+                    Sneakers
                   </div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Skateboarding
+                    Loafers
+                  </div>
+                  <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
+                    Casual
+                  </div>
+                  <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
+                    Dress Shoes
                   </div>
                 </div>
                 <div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Tennis
+                    Oxford
                   </div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Soccer
+                    Boots
                   </div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Walking
+                    Flipflops
                   </div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Golf
+                    Slides
                   </div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Limited Edition
+                    Casual Sandals
                   </div>
                 </div>
               </div>
@@ -81,7 +94,7 @@ const Navbar = () => {
         </li>
         <li className="relative group">
           <div className="flex items-center text-gray-700 hover:text-primary cursor-pointer">
-            <span>Brand</span>
+            <span>Brands</span>
             <ChevronDownIcon className="h-4 w-4 ml-1" />
             <div className="font-medium-inter text-gray-700 absolute top-full left-1/2 -translate-x-1/2 mt-1 w-96 bg-white border border-gray-200 rounded-md shadow-lg py-2 hidden group-hover:block">
               <div className="grid grid-cols-2 gap-x-4">
@@ -90,24 +103,13 @@ const Navbar = () => {
                     Nike
                   </div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
+                    Jordan
+                  </div>
+                  <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
                     Adidas
                   </div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Puma
-                  </div>
-                  <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Reebok
-                  </div>
-                  <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Under Armour
-                  </div>
-                  <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
                     New Balance
-                  </div>
-                </div>
-                <div>
-                  <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Asics
                   </div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
                     Vans
@@ -115,14 +117,22 @@ const Navbar = () => {
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
                     Converse
                   </div>
+                </div>
+                <div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Hoka One One
+                    ASICS
                   </div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Saucony
+                    Timberland
                   </div>
                   <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
-                    Fila
+                    Crocs
+                  </div>
+                  <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
+                    Dr. Martens
+                  </div>
+                  <div className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
+                    Zara
                   </div>
                 </div>
               </div>
@@ -149,12 +159,21 @@ const Navbar = () => {
       </ul>
 
       {/* Icons Section */}
-      <div className="flex space-x-4 mr-4 items-center">
+      <div className="flex space-x-4 mr-[-24px] items-center">
         <Searchbar />
         <div className="h-5 border-l border-gray-300" />
         <ShoppingCartIcon className="h-5 w-5 text-gray-700 hover:text-primary cursor-pointer" />
         <div className="h-5 border-l border-gray-300" />
-        <UserCircleIcon className="h-5 w-5 text-gray-700 hover:text-primary cursor-pointer" />
+
+        {isLoggedIn ? (
+          <UserCircleIcon className="h-5 w-5 text-gray-700 hover:text-primary cursor-pointer" />
+        ) : (
+          <div className="flex items-center space-x-2">
+            <p className="text-primary text-md font-regular-space-grotesk hover:font-bold cursor-pointer">
+              Sign In
+            </p>
+          </div>
+        )}
       </div>
     </nav>
   );

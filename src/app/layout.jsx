@@ -2,8 +2,8 @@ import React from "react";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 
-import Navbar from "./components/navbar";
-import Footer from "./components/footer";
+import Navbar from "./components/ui/navbar";
+import Footer from "./components/ui/footer";
 
 // Import Space Grotesk for the title/large text and Inter for the body text
 const spaceGrotesk = Space_Grotesk({
