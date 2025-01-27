@@ -12,7 +12,7 @@ export default function Home() {
       {/* Landing Page */}
       <div
         data-theme="lofi"
-        className="grid px-4 sm:px-8 md:px-10 lg:px-20 grid-cols-1 md:grid-cols-2 
+        className="bg-gray-400 grid px-4 sm:px-8 md:px-10 lg:px-20 grid-cols-1 md:grid-cols-2 
         items-center justify-items-center min-h-screen gap-8 md:gap-16"
       >
         {/* Text Section */}
