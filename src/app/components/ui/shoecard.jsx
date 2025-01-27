@@ -10,9 +10,12 @@ const ShoeCard = ({
   price,
   imageUrl,
   index = 0,
+  storeSlug,
 }) => {
   return (
-    <Link href={`/product/${encodeURIComponent(name)}`}>
+    <Link
+      href={`/store/${storeSlug}/${name.toLowerCase().replace(/\s+/g, "")}`}
+    >
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}

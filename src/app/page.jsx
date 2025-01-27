@@ -172,13 +172,17 @@ export default function Home() {
           className="relative flex justify-center items-center -mr-25"
         >
           <h1
-            className="text-[150px] font-bold-space-grotesk text-white 
+            className="text-[130px] font-bold-space-grotesk text-white 
             tracking-tighter leading-none [text-shadow:_-1px_-1px_0_#967969,_1px_-1px_0_#967969,_-1px_1px_0_#967969,_1px_1px_0_#967969]
             "
           >
             EVERYTHING
           </h1>
         </motion.div>
+      </div>
+
+      <div className="bg-white pt-10 pb-4 px-20 text-primary font-bold-space-grotesk text-2xl">
+        Featured Products
       </div>
 
       {/* Product Cards Section */}

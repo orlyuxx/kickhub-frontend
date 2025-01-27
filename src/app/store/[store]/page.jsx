@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { FaFilter, FaSort } from "react-icons/fa";
 import { MapPinIcon } from "@heroicons/react/24/outline";
@@ -17,6 +17,7 @@ const Products = () => {
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [sortBy, setSortBy] = useState("default");
+  const [isLoading, setIsLoading] = useState(true);
 
   const stores = [
     { id: 1, name: "KickHub Butuan", slug: "butuan" },
@@ -82,8 +83,44 @@ const Products = () => {
     return filtered;
   }, [inventory, selectedFilter, sortBy]);
 
+  const filterRef = useRef(null);
+  const sortRef = useRef(null);
+  const locationRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (
+      filterRef.current &&
+      !filterRef.current.contains(event.target) &&
+      isFilterMenuOpen
+    ) {
+      setIsFilterMenuOpen(false);
+    }
+    if (
+      sortRef.current &&
+      !sortRef.current.contains(event.target) &&
+      isSortMenuOpen
+    ) {
+      setIsSortMenuOpen(false);
+    }
+    if (
+      locationRef.current &&
+      !locationRef.current.contains(event.target) &&
+      isLocationMenuOpen
+    ) {
+      setIsLocationMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isFilterMenuOpen, isSortMenuOpen, isLocationMenuOpen]);
+
   useEffect(() => {
     const fetchProducts = async () => {
+      setIsLoading(true);
       const currentStore = stores.find((s) => s.slug === store);
       if (currentStore) {
         setStoreName(currentStore.name);
@@ -160,6 +197,8 @@ const Products = () => {
         } catch (error) {
           console.error("Error fetching data:", error);
           setInventory([]);
+        } finally {
+          setIsLoading(false);
         }
       } else {
         // Redirect to 404 if the store slug is invalid
@@ -174,135 +213,160 @@ const Products = () => {
     <main className="min-h-screen bg-white py-20">
       <div className="container mx-8 px-4 py-8">
         <div className="sticky top-20 z-10 backdrop-blur-md bg-white/75 flex justify-between items-center mb-8 mr-12 py-4 transition-all duration-200">
-          <div className="flex items-center gap-2 relative">
-            <h1 className="text-2xl font-bold-space-grotesk text-primary">
-              {storeName}
-            </h1>
-            <button
-              onClick={() => setIsLocationMenuOpen(!isLocationMenuOpen)}
-              className="hover:bg-gray-100/50 p-1 rounded-full transition-colors"
-            >
-              <MapPinIcon className="h-6 w-6 text-red-600" />
-            </button>
+          {isLoading ? (
+            // Skeleton for header while loading
+            <div className="flex items-center gap-2 relative w-full">
+              {/* Store name skeleton */}
+              <div className="animate-pulse h-8 w-48 bg-gray-200 rounded"></div>
+              {/* Location pin skeleton */}
+              <div className="animate-pulse h-6 w-6 bg-gray-200 rounded-full"></div>
 
-            {/* Dropdown Menu */}
-            {isLocationMenuOpen && (
-              <div
-                className="location-dropdown absolute top-full left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
-                role="menu"
-              >
-                <div className="py-1">
-                  {stores.map((location) => (
-                    <button
-                      key={location.id}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => router.push(`/store/${location.slug}`)}
-                    >
-                      {location.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-            <div className="ml-36 flex gap-4">
-              <div className="relative">
-                <button
-                  onClick={() => {
-                    setIsFilterMenuOpen(!isFilterMenuOpen);
-                    setIsSortMenuOpen(false);
-                  }}
-                  className="text-sm cursor-pointer text-gray-700 font-bold flex items-center"
-                >
-                  <FaFilter className="h-5 w-5 mr-1" />
-                  Filter:{" "}
-                  {selectedFilter === "all" ? "All Products" : selectedFilter}
-                </button>
-                {isFilterMenuOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                    <div className="py-1">
-                      <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleFilter("all")}
-                      >
-                        All Products
-                      </button>
-                      {Object.values(subCategories).map((category) => (
-                        <button
-                          key={category}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleFilter(category)}
-                        >
-                          {category}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="relative">
-                <button
-                  onClick={() => {
-                    setIsSortMenuOpen(!isSortMenuOpen);
-                    setIsFilterMenuOpen(false);
-                  }}
-                  className="text-sm cursor-pointer text-gray-700 font-bold flex items-center pl-10"
-                >
-                  <FaSort className="h-5 w-5 mr-1" />
-                  Sort by:{" "}
-                  {
-                    {
-                      default: "Default",
-                      "price-low": "Price: Low to High",
-                      "price-high": "Price: High to Low",
-                      "name-asc": "Name: A to Z",
-                      "name-desc": "Name: Z to A",
-                    }[sortBy]
-                  }
-                </button>
-                {isSortMenuOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                    <div className="py-1">
-                      <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleSort("default")}
-                      >
-                        Default
-                      </button>
-                      <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleSort("price-low")}
-                      >
-                        Price: Low to High
-                      </button>
-                      <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleSort("price-high")}
-                      >
-                        Price: High to Low
-                      </button>
-                      <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleSort("name-asc")}
-                      >
-                        Name: A to Z
-                      </button>
-                      <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleSort("name-desc")}
-                      >
-                        Name: Z to A
-                      </button>
-                    </div>
-                  </div>
-                )}
+              {/* Filter and Sort buttons skeleton */}
+              <div className="ml-36 flex gap-4">
+                <div className="animate-pulse h-6 w-32 bg-gray-200 rounded"></div>
+                <div className="animate-pulse h-6 w-40 bg-gray-200 rounded ml-10"></div>
               </div>
             </div>
-          </div>
+          ) : (
+            // Original content
+            <div className="flex items-center gap-2 relative" ref={locationRef}>
+              <h1 className="text-2xl font-bold-space-grotesk text-primary">
+                {storeName}
+              </h1>
+              <button
+                onClick={() => setIsLocationMenuOpen(!isLocationMenuOpen)}
+                className="hover:bg-gray-100/50 p-1 rounded-full transition-colors"
+              >
+                <MapPinIcon className="h-6 w-6 text-red-600" />
+              </button>
+
+              {/* Dropdown Menu */}
+              {isLocationMenuOpen && (
+                <div
+                  className="location-dropdown absolute top-full left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                  role="menu"
+                >
+                  <div className="py-1">
+                    {stores.map((location) => (
+                      <button
+                        key={location.id}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => router.push(`/store/${location.slug}`)}
+                      >
+                        {location.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div className="ml-36 flex gap-4">
+                <div className="relative" ref={filterRef}>
+                  <button
+                    onClick={() => {
+                      setIsFilterMenuOpen(!isFilterMenuOpen);
+                      setIsSortMenuOpen(false);
+                    }}
+                    className="text-sm cursor-pointer text-gray-700 font-bold flex items-center"
+                  >
+                    <FaFilter className="h-5 w-5 mr-1" />
+                    Filter:{" "}
+                    {selectedFilter === "all" ? "All Products" : selectedFilter}
+                  </button>
+                  {isFilterMenuOpen && (
+                    <div className="absolute top-full left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                      <div className="py-1">
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleFilter("all")}
+                        >
+                          All Products
+                        </button>
+                        {Object.values(subCategories).map((category) => (
+                          <button
+                            key={category}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => handleFilter(category)}
+                          >
+                            {category}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="relative" ref={sortRef}>
+                  <button
+                    onClick={() => {
+                      setIsSortMenuOpen(!isSortMenuOpen);
+                      setIsFilterMenuOpen(false);
+                    }}
+                    className="text-sm cursor-pointer text-gray-700 font-bold flex items-center pl-10"
+                  >
+                    <FaSort className="h-5 w-5 mr-1" />
+                    Sort by:{" "}
+                    {
+                      {
+                        default: "Default",
+                        "price-low": "Price: Low to High",
+                        "price-high": "Price: High to Low",
+                        "name-asc": "Name: A to Z",
+                        "name-desc": "Name: Z to A",
+                      }[sortBy]
+                    }
+                  </button>
+                  {isSortMenuOpen && (
+                    <div className="absolute top-full left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                      <div className="py-1">
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleSort("default")}
+                        >
+                          Default
+                        </button>
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleSort("price-low")}
+                        >
+                          Price: Low to High
+                        </button>
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleSort("price-high")}
+                        >
+                          Price: High to Low
+                        </button>
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleSort("name-asc")}
+                        >
+                          Name: A to Z
+                        </button>
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleSort("name-desc")}
+                        >
+                          Name: Z to A
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <div className="mr-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredAndSortedInventory.length > 0 ? (
+            {isLoading ? (
+              [...Array(8)].map((_, index) => (
+                <div key={index} className="animate-pulse">
+                  <div className="bg-gray-200 rounded-lg h-64 mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                </div>
+              ))
+            ) : filteredAndSortedInventory.length > 0 ? (
               filteredAndSortedInventory.map((item) => (
                 <ShoeCard
                   key={item.inventory_id}
@@ -314,6 +378,13 @@ const Products = () => {
                     item.image_url
                       ? `http://kickhub-backend.test${item.image_url}`
                       : "/images/placeholder-image.jpg"
+                  }
+                  productId={item.product.product_id}
+                  storeSlug={store}
+                  onClick={() =>
+                    router.push(
+                      `/store/${store}/${encodeURIComponent(item.product.name)}`
+                    )
                   }
                 />
               ))
